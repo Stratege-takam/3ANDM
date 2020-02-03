@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-            R.id.action_recipes -> {
+            R.id.action_recipes_retrofit -> {
                 val intent:Intent = Intent(this@MainActivity, RecipesRetrofitActivity::class.java)
                 startActivity(intent)
                 true

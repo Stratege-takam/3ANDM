@@ -9,7 +9,7 @@ import com.danicktakam.demo3andm.db.entity.Recipe
 import com.danicktakam.demo3andm.db.entity.User
 import com.danicktakam.demo3andm.recyclerextentions.onClick
 
-class RecipeAdapter(private val context: Context) : RecyclerView.Adapter<RecipeViewHolder>() {
+class RecipeAdapter() : RecyclerView.Adapter<RecipeViewHolder>() {
 
     private var arrayRecipe = mutableListOf<Recipe>()
     var onItemDetailClick: ((Int) -> Unit)? = null
@@ -17,8 +17,8 @@ class RecipeAdapter(private val context: Context) : RecyclerView.Adapter<RecipeV
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
         return RecipeViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_user, parent,
-                false), context).onClick { view, position, type ->
+                R.layout.item_recipe, parent,
+                false)).onClick { view, position, type ->
             view.setOnClickListener {
                 onItemDetailClick?.invoke(position)
             }

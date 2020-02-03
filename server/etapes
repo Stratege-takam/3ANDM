@@ -10,3 +10,23 @@ sur le serveur
 de lier les données avec le layout
 7- Afficher les informations dans le recycleview
 7-Creer une activiter pour afficher le detail 
+
+
+Comment integrer le projet dans sa machine
+1- cliquer sur ce lien https://github.com/Stratege-takam/3ANDM
+2- cliquer sur clone or download 
+3- copier ceci https://github.com/Stratege-takam/3ANDM.git 
+4- ouvrir l'invite de commande dans votre machine 
+5- saisir la commande suivante 
+	git clone https://github.com/Stratege-takam/3ANDM.git
+6- un dossier 3ANDM est crée dans votre machine
+contenant le code du projet 
+7- ouvrir android studio 
+8- cliquer sur open 
+9- choisir le dossier Demo3ANDM se trouvovant dans 3ANDM 
+10- laisser lr projet chargé 
+11- si les dépendances sont requis, charger les
+12- cliquer sur le bouton start pour le demarrer
+le projet
+13- fin  
+	

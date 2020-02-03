@@ -1,10 +1,9 @@
 package com.danicktakam.demo3andm
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.danicktakam.demo3andm.adapter.RecipeAdapter
 import com.danicktakam.demo3andm.db.entity.Recipe
@@ -17,6 +16,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class RecipesRetrofitActivity : AppCompatActivity() {
 
     private  lateinit var recipeAdapter: RecipeAdapter
@@ -24,10 +24,12 @@ class RecipesRetrofitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes_retrofit)
+
+        loadingServerData()
     }
 
     fun initAdapter(){
-        this.recipeAdapter = RecipeAdapter(this)
+        this.recipeAdapter = RecipeAdapter()
         this.recipeAdapter.onItemDetailClick = {
             val intent = Intent(this, RecipeDetailActivity::class.java)
             intent.putExtra("recipe", Gson().toJson(recipes[it]))
@@ -66,7 +68,7 @@ class RecipesRetrofitActivity : AppCompatActivity() {
                     }
                 */
 
-
+                Log.i("Name ",recipes.toString())
                 recipeAdapter.setRecipeList(recipes)
                 rcyclv_recipes.adapter = recipeAdapter
             }
