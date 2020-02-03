@@ -1,0 +1,12 @@
+1- Liste des recettes contenant un recycleview
+2- Creer une layout item_recipe qui servira comme 
+chaque element de recettes 
+3- ajouter la dependance de retrofit, gson,
+kotlin-kapt, picasso
+4- Creer la classe ou le modele recette
+5- Creer un service qui va lire les données 
+sur le serveur
+6-  Creer l'adapteur de recipe qui permettre 
+de lier les données avec le layout
+7- Afficher les informations dans le recycleview
+7-Creer une activiter pour afficher le detail 
