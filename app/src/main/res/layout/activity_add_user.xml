@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".AddUserActivity">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:fontFamily="sans-serif"
+          android:text="@string/add_user"
+          android:layout_gravity="center"
+          android:textColor="@color/colorPrimaryDark"
+          android:textSize="22sp"
+          android:textStyle="bold"
+          />
+
+      <EditText
+          android:id="@+id/edv_user_add_first_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:hint="@string/user_add_first_name"
+          android:inputType="text"
+          android:textColor="@android:color/black"
+          android:textSize="14sp"
+          />
+
+      <EditText
+          android:id="@+id/edv_user_add_last_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:hint="@string/user_add_last_name"
+          android:inputType="text"
+          android:textColor="@android:color/black"
+          android:textSize="14sp"
+          />
+
+      <Spinner
+          android:id="@+id/spner_user_add_gender"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:hint="@string/user_add_gender"
+          android:inputType="text"
+          android:textColor="@android:color/black"
+          android:textSize="14sp"
+          />
+      <Spinner
+          android:id="@+id/spner_user_add_country"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:hint="@string/user_add_country"
+          android:inputType="text"
+          android:textColor="@android:color/black"
+          android:textSize="14sp"
+          />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:gravity="center"
+          android:orientation="horizontal">
+          <Button
+              android:id="@+id/btn_add_user_save"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/save"
+              android:textSize="16sp"
+              />
+
+          <Button
+              android:id="@+id/btn_add_user_back"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/back"
+              android:textSize="16sp"
+              />
+      </LinearLayout>
+  </LinearLayout>
+
+</ScrollView>
