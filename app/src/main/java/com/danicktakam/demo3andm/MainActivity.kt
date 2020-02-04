@@ -2,6 +2,7 @@ package com.danicktakam.demo3andm
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -9,18 +10,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.danicktakam.demo3andm.adapter.UserListAdapter
 import com.danicktakam.demo3andm.db.ApplicationDatabase
+import com.danicktakam.demo3andm.db.entity.Recipe
 import com.danicktakam.demo3andm.db.entity.User
 import com.danicktakam.demo3andm.db.utils.RoomConstants
+import com.danicktakam.demo3andm.services.IRecipeService
+import com.danicktakam.demo3andm.services.IUserService
+import com.danicktakam.demo3andm.services.UserSevice
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_recipes_retrofit.*
 import kotlinx.android.synthetic.main.content_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var userListAdapter: UserListAdapter
     private var db: ApplicationDatabase? = null
-    private lateinit var users: List<User>
+    private lateinit var users: MutableList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,6 +48,43 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this,  "On create", Toast.LENGTH_LONG).show()
     }
 
+
+
+    fun loadingRoom(){
+        users = db?.userDao()?.getAll()!!
+        userListAdapter.setUserList(users)
+        recyclerusers.adapter = userListAdapter
+    }
+    fun loadingRetrofit(){
+        val retrofit = UserSevice().getRetrofitService()
+
+        val service = retrofit.create(IUserService::class.java)
+
+        service.getUser().enqueue(object: Callback<List<User>> {
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                Log.e("error :",t.message)
+            }
+
+            override fun onResponse(
+                call: Call<List<User>>,
+                response: Response<List<User>>
+            ) {
+                users = response.body()!!.toList() as MutableList<User>
+                /*
+                    response.body()!!.forEach{
+                        Log.i("Name ",it.Name)
+                        students.add(it)
+                    }
+                */
+
+                Log.i("Name ",users.toString())
+                userListAdapter.setUserList(users)
+                recyclerusers.adapter = userListAdapter
+            }
+
+        })
+    }
+
     private fun initView() {
         db = ApplicationDatabase.getInstance(this)
         recyclerusers.layoutManager = LinearLayoutManager(this)
@@ -48,9 +95,24 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             //DeleteUserAsync(db!!.userDao(), RoomConstants.DELETE_USER, this).execute(arrayUser[position])
         }
-        users = db?.userDao()?.getAll()!!
-        userListAdapter.setUserList(users.toMutableList())
-        recyclerusers.adapter = userListAdapter
+
+        var connect = true
+        if(UserSevice().getIfInternetIsAvailable(this)){
+            try {
+                loadingRetrofit()
+            } catch (ex: Exception){
+                Toast.makeText(this,  "Can't connect to server", Toast.LENGTH_LONG).show()
+                connect = false
+            }
+        }
+
+        if(!UserSevice().getIfInternetIsAvailable(this) || !connect){
+            try {
+                loadingRoom()
+            } catch (ex: Exception){
+                Toast.makeText(this,  "Can't connect to sqlite", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 

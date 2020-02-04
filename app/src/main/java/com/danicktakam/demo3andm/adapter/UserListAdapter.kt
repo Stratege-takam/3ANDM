@@ -32,5 +32,6 @@ class UserListAdapter : RecyclerView.Adapter<UserViewHolder>() {
 
     fun setUserList(arrayUser: MutableList<User>) {
         this.arrayUser = arrayUser
+        notifyDataSetChanged()
     }
 }

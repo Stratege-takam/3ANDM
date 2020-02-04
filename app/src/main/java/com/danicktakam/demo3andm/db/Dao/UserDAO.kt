@@ -6,7 +6,7 @@ import com.danicktakam.demo3andm.db.entity.User
 @Dao
 interface UserDAO {
     @Query("SELECT * FROM users")
-    fun getAll(): List<User>
+    fun getAll(): MutableList<User>
 
     @Query("SELECT * FROM users WHERE Id IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<User>

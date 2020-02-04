@@ -22,5 +22,5 @@ class User(
     @ColumnInfo(name = "Country")
     var Country: String? = null
 ) {
-    constructor() : this(0, "", "")
+    constructor() : this(0, "", "", "", "")
 }

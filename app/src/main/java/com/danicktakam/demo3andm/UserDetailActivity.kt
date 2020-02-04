@@ -12,8 +12,13 @@ import com.danicktakam.demo3andm.db.Dao.UserDAO
 import com.danicktakam.demo3andm.db.entity.User
 import com.danicktakam.demo3andm.db.utils.RoomConstants
 import com.danicktakam.demo3andm.services.AsyncResponseCallback
+import com.danicktakam.demo3andm.services.IUserService
+import com.danicktakam.demo3andm.services.UserSevice
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_user_detail.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.math.log
 
 class UserDetailActivity : AppCompatActivity(), AsyncResponseCallback {
@@ -48,7 +53,7 @@ class UserDetailActivity : AppCompatActivity(), AsyncResponseCallback {
 
            // Set a positive button and its click listener on alert dialog
            builder.setPositiveButton("YES"){dialog, which ->
-               DeleteUserAsync(db!!.userDao(), RoomConstants.DELETE_USER, this).execute(user)
+               deleteUserAsync(this@UserDetailActivity,db!!.userDao(), RoomConstants.DELETE_USER, this).execute(user)
            }
 
 
@@ -86,11 +91,43 @@ class UserDetailActivity : AppCompatActivity(), AsyncResponseCallback {
         }
     }
 
-    class DeleteUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
+    fun deleteRetrofit(id: Int = 0){
+        val retrofit = UserSevice().getRetrofitService()
+
+        val service = retrofit.create(IUserService::class.java)
+
+
+        service.deleteUser(id).enqueue( object : Callback<User> {
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("error :",t.message)
+            }
+
+            override fun onResponse(
+                call: Call<User>,
+                response: Response<User>
+            ) {
+                val myuser = response.body()!!
+
+                Log.i("User ",myuser.toString())
+            }
+
+        })
+    }
+
+
+    class deleteUserAsync(private val context: UserDetailActivity,private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
         override fun doInBackground(vararg user: User?): User? {
             return try {
-                userDao.delete(user[0]!!)
-                user[0]!!
+                val myuser = user[0]!!
+                userDao.delete(myuser)
+                if(UserSevice().getIfInternetIsAvailable(context)){
+                    try {
+                        context.deleteRetrofit(myuser.Id)
+                    } catch (ex: java.lang.Exception){
+                        Toast.makeText(context,  "Can't edit user to server", Toast.LENGTH_LONG).show()
+                    }
+                }
+                myuser!!
             } catch (ex: Exception) {
                 null
             }

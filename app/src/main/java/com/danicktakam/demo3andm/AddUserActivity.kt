@@ -8,14 +8,21 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.danicktakam.demo3andm.db.ApplicationDatabase
 import com.danicktakam.demo3andm.db.Dao.UserDAO
 import com.danicktakam.demo3andm.db.entity.User
 import com.danicktakam.demo3andm.db.utils.RoomConstants
 import com.danicktakam.demo3andm.services.AsyncResponseCallback
 import com.danicktakam.demo3andm.services.CountryService
+import com.danicktakam.demo3andm.services.IUserService
+import com.danicktakam.demo3andm.services.UserSevice
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_add_user.*
+import kotlinx.android.synthetic.main.content_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class AddUserActivity : AppCompatActivity(), View.OnClickListener, AsyncResponseCallback {
@@ -104,17 +111,59 @@ class AddUserActivity : AppCompatActivity(), View.OnClickListener, AsyncResponse
         }
     }
 
+
+    fun SaveRetrofit(user: User, id: Int = 0){
+        val retrofit = UserSevice().getRetrofitService()
+
+        val service = retrofit.create(IUserService::class.java)
+
+        val req = if(id == 0) service.createUser(user) else service.updateUser(id, user)
+
+        req.enqueue( object :Callback<User>{
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("error :",t.message)
+            }
+
+            override fun onResponse(
+                call: Call<User>,
+                response: Response<User>
+            ) {
+                val myuser = response.body()!!
+
+                Log.i("User ",myuser.toString())
+            }
+
+        })
+    }
+
     class SaveUserAsync(private val context: AddUserActivity,private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
         override fun doInBackground(vararg user: User?): User? {
             return try {
                 when(context.currentAction){
                     RoomConstants.UPDATE_USER -> {
-                        userDao.updateAll(user[0]!!)
-                        user[0]!!
+                        val myuser = user[0]!!
+                        userDao.updateAll(myuser)
+
+                        if(UserSevice().getIfInternetIsAvailable(context)){
+                            try {
+                                context.SaveRetrofit(myuser, myuser.Id)
+                            } catch (ex: java.lang.Exception){
+                                Toast.makeText(context,  "Can't edit user to server", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        myuser
                     }
                     RoomConstants.INSERT_USER -> {
-                        userDao.insertAll(user[0]!!)
-                        user[0]!!
+                        val myuser = user[0]!!
+                        userDao.insertAll(myuser)
+                        if(UserSevice().getIfInternetIsAvailable(context)){
+                            try {
+                                context.SaveRetrofit(myuser)
+                            } catch (ex: java.lang.Exception){
+                                Toast.makeText(context,  "Can't add user to server", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        myuser
                     }
                     else -> {
                         user[0]!!
