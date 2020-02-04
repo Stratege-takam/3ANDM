@@ -14,9 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecipeDetailActivity"></activity>
-        <activity android:name=".RecipesRetrofitActivity" />
-        <activity android:name=".RecipeActivity" />
+        <activity android:parentActivityName=".MainActivity"
+            android:name=".RecipeDetailActivity"></activity>
+        <activity
+            android:parentActivityName=".MainActivity"
+            android:name=".RecipesRetrofitActivity" />
+        <activity
+            android:parentActivityName=".MainActivity"
+            android:name=".RecipeActivity" />
         <activity
             android:name=".UserDetailActivity"
             android:parentActivityName=".MainActivity" />

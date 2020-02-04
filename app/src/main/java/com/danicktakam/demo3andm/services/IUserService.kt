@@ -8,10 +8,10 @@ interface IUserService {
     @POST("users/new")
     fun createUser(@Body user: User):  Call<User>
 
-    @PUT("user/{id}")
+    @PUT("users/{id}")
     fun updateUser(@Part("id") id: Int, @Body user: User):  Call<User>
 
-    @DELETE("user/{id}")
+    @DELETE("users/{id}")
     fun deleteUser(@Part("id") id: Int):  Call<User>
 
     @GET("users")

@@ -1,6 +1,7 @@
 package com.danicktakam.demo3andm
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -40,9 +41,12 @@ class MainActivity : AppCompatActivity() {
             /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
             */
-            val intent:Intent = Intent(applicationContext, AddUserActivity::class.java)
+           /* val intent:Intent = Intent(applicationContext, AddUserActivity::class.java)
             intent.putExtra(RoomConstants.ACTION_USER, RoomConstants.INSERT_USER)
-            startActivity(intent)
+            startActivity(intent) */
+            val impliciteIntentSendMail = Intent(Intent.ACTION_SENDTO);
+            impliciteIntentSendMail.data = Uri.parse("mailto:213346@supinfo.com")
+            startActivity(impliciteIntentSendMail)
         }
 
         Toast.makeText(this,  "On create", Toast.LENGTH_LONG).show()
@@ -62,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         service.getUser().enqueue(object: Callback<List<User>> {
             override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                loadingRoom()
                 Log.e("error :",t.message)
             }
 
